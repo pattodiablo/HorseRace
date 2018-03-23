@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Refinery Builder</title>
+        <script src="lib/phaser.min.js"></script>
+
+        <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+
+
+
+
+
+    </head>
+    <body>
+
+    <script type="text/javascript">
+
+		var MyGame = {};
+
+
+
+		MyGame.StateA = function (game) {
+			console.log('State:Inicio')
+
+		
+		};
+
+		MyGame.StateA.prototype = Object.create(Phaser.State.prototype);
+		MyGame.StateA.prototype.constructor = MyGame.StateA;
+		
+        MyGame.StateA.prototype.preload = function () {
+
+            game.load.image('number0', 'assets/number0.png');
+            game.load.image('number1', 'assets/number1.png');
+            game.load.image('number2', 'assets/number2.png');
+            game.load.image('number3', 'assets/number3.png');
+            game.load.image('number4', 'assets/number4.png');
+            game.load.image('number5', 'assets/number5.png');
+            game.load.image('number6', 'assets/number6.png');
+            game.load.image('number7', 'assets/number7.png');
+            game.load.image('number8', 'assets/number8.png');
+            game.load.image('number9', 'assets/number9.png');
+
+
+        };
+
+		MyGame.StateA.prototype.init = function () {
+			 game.stage.disableVisibilityChange = true;
+			var Client;
+			var numeros;
+			var currentNumber;
+			var lastNumber;
+	
+
+			};
+		
+		MyGame.StateA.prototype.create = function () {
+			
+
+		this.Client={};		
+		this.Client.socket = io.connect('http://35.198.5.19:3000');	
+
+		
+		this.Client.socket.on('StopTheShit', function(estado){
+		     console.log("----------------------------------------------");
+		     console.log('Tratando de detener la Shit');
+		     console.log(estado);
+		  	
+		  	if(estado){
+
+		  		  game.paused = true;
+		  	}else{
+		  		 game.paused = false;
+
+		  	}
+		    
+	
+		  });
+
+
+
+		numeros = new Array('number0','number1','number2','number3','number4','number5','number6','number7','number8','number9');
+		lastNumber = new Array();
+		currentNumber = 0;
+
+
+		game.time.events.loop(80, this.cambiarNumeros, this);
+		
+
+	
+		};
+
+
+MyGame.StateA.prototype.cambiarNumeros = function () {
+	
+		if(lastNumber.length>0){
+
+				lastNumber[0].kill();
+				lastNumber.splice(0);	
+			}
+
+		currentNumber++
+		if(currentNumber>=10){
+			currentNumber = 0;
+		}
+
+		this.number = game.add.sprite(this.game.world.centerX, this.game.world.centerY, numeros[currentNumber]);
+		this.number.anchor.x = 0.5;
+		this.number.anchor.y = 0.5;
+		lastNumber.push(this.number);
+		
+		};
+
+
+
+		MyGame.StateA.prototype.timeStop = function () {
+		
+		game.time.events.stop();
+		
+		};
+
+	
+		MyGame.StateA.prototype.update = function () {
+		
+		
+		
+		};
+
+		MyGame.StateA.prototype.render = function () {
+		
+		};
+		
+
+	var game = new Phaser.Game(600, 600, Phaser.AUTO, 'container');  
+
+	game.state.add('Inicio', MyGame.StateA);  
+	game.state.start('Inicio');
+
+
+    </script>
+
+   
+<script>
+
+
+
+
+</script>
+
+  
+    </body>
+</html>
